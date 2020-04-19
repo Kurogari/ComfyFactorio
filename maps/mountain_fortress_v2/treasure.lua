@@ -1,8 +1,29 @@
-local math_random = math.random
-
 local Public = {}
 
+local math_random = math.random
+local math_floor = math.floor
+local math_abs = math.abs
+
+local LootRaffle = require "functions.loot_raffle"
+
 function Public.treasure_chest(surface, position, container_name)
+	local budget = 32 + math_abs(position.y) * 2
+	budget = budget * math_random(25, 175) * 0.01
+	if math_random(1,200) == 1 then 
+		budget = budget * 10
+		container_name = "compilatron-chest"
+	end
+	budget = math_floor(budget) + 1
+
+	local item_stacks = LootRaffle.roll(budget, 8)
+	local container = surface.create_entity({name = container_name, position = position, force = "neutral"})
+	for _, item_stack in pairs(item_stacks) do
+		container.insert(item_stack)
+	end
+	container.minable = false
+end
+
+function Public.treasure_chest_old(surface, position, container_name)
 
 	local chest_raffle = {}
 	local chest_loot = {
@@ -119,8 +140,8 @@ function Public.treasure_chest(surface, position, container_name)
 		{{name = "decider-combinator", count = math_random(4,8)}, weight = 2, d_min = 0.1, d_max = 1},
 		{{name = "power-switch", count = 1}, weight = 2, d_min = 0.1, d_max = 1},
 		{{name = "programmable-speaker", count = math_random(2,4)}, weight = 1, d_min = 0.1, d_max = 1},
-		{{name = "green-wire", count = math_random(10,19)}, weight = 2, d_min = 0.1, d_max = 1},
-		{{name = "red-wire", count = math_random(10,19)}, weight = 2, d_min = 0.1, d_max = 1},
+		{{name = "green-wire", count = math_random(50,99)}, weight = 4, d_min = 0.1, d_max = 1},
+		{{name = "red-wire", count = math_random(50,99)}, weight = 4, d_min = 0.1, d_max = 1},
 		{{name = "chemical-plant", count = math_random(1,3)}, weight = 3, d_min = 0.3, d_max = 1},
 		{{name = "burner-mining-drill", count = math_random(2,4)}, weight = 3, d_min = 0.0, d_max = 0.2},
 		{{name = "electric-mining-drill", count = math_random(2,4)}, weight = 3, d_min = 0.2, d_max = 1},

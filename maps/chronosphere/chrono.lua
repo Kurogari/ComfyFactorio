@@ -27,17 +27,6 @@ function Public_chrono.restart_settings()
   local objective = global.objective
   objective.max_health = 10000
 	objective.health = 10000
-	objective.hpupgradetier = 0
-	objective.acuupgradetier = 0
-	objective.filterupgradetier = 0
-	objective.pickupupgradetier = 0
-	objective.invupgradetier = 0
-	objective.toolsupgradetier = 0
-	objective.waterupgradetier = 0
-	objective.outupgradetier = 0
-	objective.boxupgradetier = 0
-	objective.pistolupgradetier = 0
-	objective.poisondefense = 2
 	objective.poisontimeout = 0
 	objective.chronotimer = 0
 	objective.passivetimer = 0
@@ -52,6 +41,10 @@ function Public_chrono.restart_settings()
 	objective.looted_nukes = 0
 	objective.offline_players = {}
   objective.nextsurface = nil
+	for i = 1, 16, 1 do
+		objective.upgrades[i] = 0
+	end
+	objective.upgrades[10] = 2 --poison
 	global.outchests = {}
 	global.upgradechest = {}
 	global.fishchest = {}
@@ -167,19 +160,19 @@ function Public_chrono.process_jump(choice)
 	Server.to_discord_embed(message)
 
 	if objective.chronojumps == 6 then
-		game.print({"chronosphere.message_evolve"}, {r=0.98, g=0.66, b=0.22})
+		game.print({"chronosphere.message_evolve"}, {r=0.98, g=0.36, b=0.22})
 	elseif objective.chronojumps >= 15 and objective.computermessage == 0 then
-		game.print({"chronosphere.message_quest1"}, {r=0.98, g=0.66, b=0.22})
+		game.print({"chronosphere.message_quest1"}, {r=0.98, g=0.36, b=0.22})
     objective.computermessage = 1
 	elseif objective.chronojumps >= 20 and objective.computermessage == 2 then
-		game.print({"chronosphere.message_quest3"}, {r=0.98, g=0.66, b=0.22})
+		game.print({"chronosphere.message_quest3"}, {r=0.98, g=0.36, b=0.22})
     objective.computermessage = 3
 	elseif objective.chronojumps >= 25 and objective.computermessage == 4 then
-		game.print({"chronosphere.message_quest5"}, {r=0.98, g=0.66, b=0.22})
+		game.print({"chronosphere.message_quest5"}, {r=0.98, g=0.36, b=0.22})
     objective.computermessage = 5
 	end
 	if overstayed then
-    game.print({"chronosphere.message_overstay"}, {r=0.98, g=0.66, b=0.22})
+    game.print({"chronosphere.message_overstay"}, {r=0.98, g=0.36, b=0.22})
   end
   if objective.planet[1].name.id == 19 then
     check_nuke_silos()

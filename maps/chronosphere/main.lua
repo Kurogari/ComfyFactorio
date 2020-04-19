@@ -1,5 +1,7 @@
 -- chronosphere --
 
+global.objective = {}
+global.objective.upgrades = {}
 require "modules.difficulty_vote"
 require "modules.biters_yield_coins"
 require "modules.no_deconstruction_of_neutral_entities"
@@ -25,7 +27,6 @@ local Gui = require "maps.chronosphere.gui"
 local math_random = math.random
 local math_floor = math.floor
 local math_sqrt = math.sqrt
-global.objective = {}
 global.objective.config = {}
 global.flame_boots = {}
 global.comfylatron = nil
@@ -37,9 +38,10 @@ local starting_items = {['pistol'] = 1, ['firearm-magazine'] = 32, ['grenade'] =
 local function generate_overworld(surface, optplanet)
 	Planets.determine_planet(optplanet)
 	local planet = global.objective.planet
-	--local message = "Planet info: " .. planet[1].name.name .. ", Ore richness: " .. planet[1].ore_richness.name .. ", Speed of day: " .. planet[1].day_speed.name
-	--game.print(message, {r=0.98, g=0.66, b=0.22})
-	--Server.to_discord_embed(message)
+	local message = {"chronosphere.planet_jump", planet[1].name.name, planet[1].ore_richness.name, planet[1].day_speed.name}
+	game.print(message, {r=0.98, g=0.66, b=0.22})
+	local discordmessage = "Destination: "..planet[1].name.dname..", Ore Richness: "..planet[1].ore_richness.dname..", Daynight cycle: "..planet[1].day_speed.dname
+	Server.to_discord_embed(discordmessage)
 	if planet[1].name.id == 12 then
 		game.print({"chronosphere.message_choppy"}, {r=0.98, g=0.66, b=0.22})
 	elseif planet[1].name.id == 14 then
@@ -124,10 +126,10 @@ local function reset_map()
 	end
 	if game.surfaces["chronosphere"] then game.delete_surface(game.surfaces["chronosphere"]) end
 	if game.surfaces["cargo_wagon"] then game.delete_surface(game.surfaces["cargo_wagon"]) end
-	--chests = {}
 	local objective = global.objective
-	objective.computerupgrade = 0
-	objective.computerparts = 0
+	for i = 13, 16, 1 do
+		objective.upgrades[i] = 0
+	end
 	objective.computermessage = 0
 	objective.chronojumps = 0
 	Planets.determine_planet(nil)
@@ -245,7 +247,7 @@ local function chronojump(choice)
 	game.delete_surface(oldsurface)
 	Chrono.post_jump()
 	Event_functions.flamer_nerfs()
-	surface.pollute(global.locomotive.position, 150 * (4 / (objective.filterupgradetier / 2 + 1)) * (1 + global.objective.chronojumps) * global.difficulty_vote_value)
+	surface.pollute(global.locomotive.position, 150 * (4 / (objective.upgrades[2] / 2 + 1)) * (1 + global.objective.chronojumps) * global.difficulty_vote_value)
 end
 
 local tick_minute_functions = {
@@ -302,7 +304,7 @@ local function tick()
 			objective.chronotimer = objective.chronotimer + 1
 			objective.passivetimer = objective.passivetimer + 1
 			if objective.chronojumps > 0 then
-				game.surfaces[global.active_surface_index].pollute(global.locomotive.position, (0.5 * objective.chronojumps) * (4 / (objective.filterupgradetier / 2 + 1)) * global.difficulty_vote_value)
+				game.surfaces[global.active_surface_index].pollute(global.locomotive.position, (0.5 * objective.chronojumps) * (4 / (objective.upgrades[2] / 2 + 1)) * global.difficulty_vote_value)
 			end
 			if objective.planet[1].name.id == 19 then
 				Tick_functions.dangertimer()
@@ -378,7 +380,6 @@ local function on_entity_damaged(event)
 	Event_functions.biters_chew_rocks_faster(event)
 	if event.entity.force.name == "enemy" then
 		Event_functions.biter_immunities(event)
-		Event_functions.pistol_buffs(event)
 	end
 end
 
