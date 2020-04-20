@@ -428,8 +428,8 @@ local function biter_panel(player)
 
 	local frame = player.gui.screen.add { type = "frame", caption = "Biter Commander", name = "biter_panel", direction = "vertical" }
   frame.location = {x = 5, y = 45}
-  frame.style.minimal_height = 680
-  frame.style.maximal_height = 680
+  frame.style.minimal_height = 750
+  frame.style.maximal_height = 750
   frame.style.minimal_width = 330
   frame.style.maximal_width = 330
 
@@ -447,23 +447,43 @@ local function biter_panel(player)
 	drop_down.style.minimal_width = 150
 	drop_down.style.right_padding = 12
 	drop_down.style.left_padding = 12
-  t0.add({type = "sprite-button", name = "info", sprite = "virtual-signal/signal-info"})
-  t0.add({type = "sprite-button", name = "close_biters", sprite = "virtual-signal/signal-X"})
+  drop_down.style.horizontally_stretchable = true
+  local l = {}
+  l[1] = t0.add({type = "sprite-button", name = "info", sprite = "file/info-white.png", hovered_sprite = "file/info-black.png"})
+  l[2] = t0.add({type = "sprite-button", name = "close", sprite = "file/close-white.png", hovered_sprite = "file/close-black.png"})
+  for i = 1, 2, 1 do
+    l[i].style.width = 40
+    l[i].style.height = 40
+  end
 
-  local l1 = frame.add({type = "label", caption = "Camera"})
+  local l = {}
+  l[1] = frame.add({type = "label", caption = "Camera"})
   local t1 = frame.add({type = "table", name = "camera", column_count = 2})
-  local l2 = frame.add({type = "label", caption = "Movement"})
+  l[2] = frame.add({type = "label", caption = "Movement"})
   local t2 = frame.add({type = "table", name = "movement", column_count = 2})
-  local l3 = frame.add({type = "label", caption = "Build"})
+  l[3] = frame.add({type = "label", caption = "Build"})
   local t3 = frame.add({type = "table", name = "build", column_count = 2})
-  local l4 = frame.add({type = "label", caption = "Attack"})
+  l[4] = frame.add({type = "label", caption = "Attack"})
   local t4 = frame.add({type = "table", name = "attack", column_count = 2})
-  local l5 = frame.add({type = "label", caption = "Group Management"})
+  l[5] = frame.add({type = "label", caption = "Group Management"})
   local t5 = frame.add({type = "table", name = "management", column_count = 2})
+  for i = 1, 5, 1 do
+    l[i].style.font = "default-large-bold"
+    l[i].style.font_color = {r = 230, g = 120, b = 70}
+    l[i].style.width = 310
+    l[i].style.horizontal_align = "center"
+  end
+
   local line = frame.add { type = "line"}
-	line.style.top_margin = 8
-	line.style.bottom_margin = 8
+	-- line.style.top_margin = 8
+	-- line.style.bottom_margin = 8
+  l[6] = frame.add({type = "label", caption = "Directions"})
   local t6 = frame.add({type = "table", name = "directions", column_count = 3})
+    l[6].style.font = "default-large-bold"
+    l[6].style.font_color = {r = 180, g = 80, b = 210}
+    l[6].style.width = 310
+    l[6].style.horizontal_align = "center"
+
 	local buttons = {
 		t1.add({type = "button", caption = "Pan to group", name = "pan", tooltip = "Moves camera to group position."}),
 		t1.add({type = "button", caption = "TP to group", name = "teleport", tooltip = "Teleports to group."}),
@@ -495,14 +515,18 @@ local function biter_panel(player)
     t6.add({type = "button", caption = "25 S", name = "s", tooltip = "Changes remote position"}),
     t6.add({type = "button", caption = "25 SE", name = "se", tooltip = "Changes remote position"}),
 	}
+  t6.style.left_margin = "45"
+  t6.style.right_margin = "45"
+  t6.style.bottom_margin = "10"
+
 	for _, button in pairs(buttons) do
 		button.style.font = "default-bold"
-		button.style.font_color = { r=0.99, g=0.99, b=0.99}
+		button.style.font_color = {r=0.99, g=0.99, b=0.99}
 		button.style.minimal_width = 150
 	end
   for _, button in pairs(buttons2) do
 		button.style.font = "default-bold"
-		button.style.font_color = { r=0.99, g=0.99, b=0.99}
+		button.style.font_color = {r=0.99, g=0.99, b=0.99}
 		button.style.minimal_width = 70
 	end
   local t7 = frame.add({type = "table", name = "coords", column_count = 2})
@@ -510,6 +534,8 @@ local function biter_panel(player)
   t7.add({type = "textfield", name = "coord_x"})
   t7.add({type = "label", caption = "Y: "})
   t7.add({type = "textfield", name = "coord_y"})
+  t7.style.left_margin = "45"
+  t7.style.right_margin = "45"
 end
 
 local comm_functions = {
@@ -572,7 +598,7 @@ local function on_gui_click(event)
 	if event.element.type ~= "button" and event.element.type ~= "sprite-button" then return end
 	--if event.frame.name ~= "biter_panel" then return end
   local name = event.element.name
-	if name == "close_biters" then biter_panel(player) return end
+  if name == "close_biters" then biter_panel(player) return end
   if name == "info" then show_info(player) return end
   if name == "close_info" then show_info(player) return end
   if comm_functions[name] then

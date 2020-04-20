@@ -239,9 +239,8 @@ local function planet_gui(player)
   frame.style.maximal_height = 500
   frame.style.minimal_width = 200
   frame.style.maximal_width = 400
-	local l = {}
-	l[1] = frame.add({type = "label", name = "planet_name", caption = {"chronosphere.gui_planet_0", planet.name.name}})
-  l[2] = frame.add({type = "label", caption = {"chronosphere.gui_planet_1"}})
+	frame.add({type = "label", name = "planet_name", caption = {"chronosphere.gui_planet_0", planet.name.name}})
+	frame.add({type = "label", caption = {"chronosphere.gui_planet_1"}})
 	local table0 = frame.add({type = "table", name = "planet_ores", column_count = 3})
 	table0.add({type = "sprite-button", name = "iron-ore", sprite = "item/iron-ore", enabled = false, number = planet.name.iron})
 	table0.add({type = "sprite-button", name = "copper-ore", sprite = "item/copper-ore", enabled = false, number = planet.name.copper})
@@ -249,7 +248,7 @@ local function planet_gui(player)
 	table0.add({type = "sprite-button", name = "stone", sprite = "item/stone", enabled = false, number = planet.name.stone})
 	table0.add({type = "sprite-button", name = "uranium-ore", sprite = "item/uranium-ore", enabled = false, number = planet.name.uranium})
 	table0.add({type = "sprite-button", name = "oil", sprite = "fluid/crude-oil", enabled = false, number = planet.name.oil})
-	l[3] = frame.add({type = "label", name = "richness", caption = {"chronosphere.gui_planet_2", planet.ore_richness.name}})
+	frame.add({type = "label", name = "richness", caption = {"chronosphere.gui_planet_2", planet.ore_richness.name}})
 	frame.add({type = "line"})
 	frame.add({type = "label", name = "planet_biters", caption = {"chronosphere.gui_planet_3", math_floor(evolution * 1000) / 10}})
 	frame.add({type = "label", name = "planet_biters2", caption = {"chronosphere.gui_planet_4"}})
@@ -258,10 +257,7 @@ local function planet_gui(player)
 	frame.add({type = "label", name = "planet_time", caption = {"chronosphere.gui_planet_5", planet.day_speed.name}})
 	frame.add({type = "line"})
   local close = frame.add({type = "button", name = "close_planet", caption = "Close"})
-	close.style.horizontal_align = "center"
-	-- for i = 1, 3, 1 do
-	-- 	l[i].style.font = "default-game"
-	-- end
+	close.style.horizontally_stretchable = true
 end
 
 function Public_gui.on_gui_click(event)

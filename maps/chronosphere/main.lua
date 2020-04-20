@@ -330,8 +330,8 @@ end
 local function on_init()
 	local T = Map.Pop_info()
 	T.localised_category = "chronosphere"
-	T.main_caption_color = {r = 150, g = 150, b = 0}
-	T.sub_caption_color = {r = 0, g = 150, b = 0}
+	T.main_caption_color = {r = 230, g = 120, b = 70}
+	T.sub_caption_color = {r = 180, g = 80, b = 210}
 	global.objective.game_lost = true
 	global.objective.game_won = false
 	global.objective.offline_players = {}
